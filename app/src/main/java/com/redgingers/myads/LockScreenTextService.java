@@ -8,8 +8,6 @@ import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -25,7 +23,7 @@ public class LockScreenTextService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
@@ -37,7 +35,7 @@ public class LockScreenTextService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        windowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
         //add textview and its properties
         textview = new TextView(this);
@@ -75,21 +73,22 @@ public class LockScreenTextService extends Service {
     public class LockScreenStateReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                //if screen is turn off show the textview
-//                if (!isShowing) {
-//                Log.d()
-                windowManager.removeViewImmediate(textview);
-                    windowManager.addView(textview, params);
-//                    isShowing = true;
-//                }
-            }
 
-            else if(intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
-                //Handle resuming events if user is present/screen is unlocked remove the textview immediately
+
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+//                windowManager.removeViewImmediate(textview);
+//                windowManager.addView(textview, params);
+//                AdView adView = new AdView(context, R.layout.layout_adview);
+//                adView.show();
+
+                Intent i = new Intent();
+                i.setClassName(context.getPackageName(), MainActivity.class.getCanonicalName());
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
                 if (isShowing) {
-                    windowManager.removeViewImmediate(textview);
-                    isShowing = false;
+                    //  windowManager.removeViewImmediate(textview);
+                    //  isShowing = false;
                 }
             }
         }
