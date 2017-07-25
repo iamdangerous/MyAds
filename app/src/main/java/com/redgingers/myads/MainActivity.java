@@ -1,11 +1,5 @@
 package com.redgingers.myads;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.inmobi.ads.InMobiAdRequestStatus;
-import com.inmobi.ads.InMobiInterstitial;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,9 +7,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.inmobi.ads.InMobiAdRequestStatus;
+import com.inmobi.ads.InMobiInterstitial;
 
 import java.util.Map;
 
@@ -34,10 +36,17 @@ public class MainActivity extends BaseActivity {
 
     private InterstitialAd mInterstitialAd;
     private TextView mLevelTextView;
-    private boolean mCanShowAd ;
+    private boolean mCanShowAd;
     private InMobiInterstitial inMobiInterstitial;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                WindowManager.LayoutParams.FLAG_FULLSCREEN |
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -57,19 +66,18 @@ public class MainActivity extends BaseActivity {
         Toast.makeText(this, TOAST_TEXT, Toast.LENGTH_LONG).show();
     }
 
-    private void checkSharedPrefs(){
-        boolean showAd = sp.getBoolean(Constants.SHOW_ADS,false);
-        if(showAd)
-        {
+    private void checkSharedPrefs() {
+        boolean showAd = sp.getBoolean(Constants.SHOW_ADS, false);
+        if (showAd) {
             inMobiInterstitial.load();
         }
     }
 
-    private void startServices(){
-        startService(new Intent(this,LockScreenService.class));
+    private void startServices() {
+        startService(new Intent(this, LockScreenService.class));
     }
 
-    private void initViews(){
+    private void initViews() {
         mLevelTextView = (TextView) findViewById(R.id.level);
         btnNextLevel = ((Button) findViewById(R.id.next_level_button));
         btnShowInMobiAd = ((Button) findViewById(R.id.btn_show_in_mobi_ad));
@@ -78,7 +86,7 @@ public class MainActivity extends BaseActivity {
         btnExit = ((Button) findViewById(R.id.btn_exit));
     }
 
-    private void setCLicks(){
+    private void setCLicks() {
 
         btnShowInMobiAd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,10 +111,10 @@ public class MainActivity extends BaseActivity {
         btnShowAdsAtLS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startService(new Intent(MainActivity.this,LockScreenService.class));
+                startService(new Intent(MainActivity.this, LockScreenService.class));
 
                 SharedPreferences.Editor editor = sp.edit();
-                editor.putBoolean(Constants.SHOW_ADS,true);
+                editor.putBoolean(Constants.SHOW_ADS, true);
                 editor.apply();
             }
         });
@@ -114,10 +122,10 @@ public class MainActivity extends BaseActivity {
         btnRemoveLS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stopService(new Intent(MainActivity.this,LockScreenService.class));
+                stopService(new Intent(MainActivity.this, LockScreenService.class));
 
                 SharedPreferences.Editor editor = sp.edit();
-                editor.putBoolean(Constants.SHOW_ADS,false);
+                editor.putBoolean(Constants.SHOW_ADS, false);
                 editor.apply();
 
             }
@@ -126,7 +134,7 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private void init(){
+    private void init() {
         mLevel = START_LEVEL;
         btnNextLevel.setEnabled(false);
         // Create the InterstitialAd and set the adUnitId (defined in values/strings.xml).
@@ -136,20 +144,20 @@ public class MainActivity extends BaseActivity {
         inMobiInterstitial = new InMobiInterstitial(this, 1502205407688L, mInterstitialAdListener);
     }
 
-    private void showInMobiAdd(){
+    private void showInMobiAdd() {
         inMobiInterstitial.show();
     }
 
     private InMobiInterstitial.InterstitialAdListener2 mInterstitialAdListener = new InMobiInterstitial.InterstitialAdListener2() {
         @Override
         public void onAdLoadFailed(InMobiInterstitial inMobiInterstitial, InMobiAdRequestStatus inMobiAdRequestStatus) {
-        Log.d(TAG,"onAdLoadFinished");
+            Log.d(TAG, "onAdLoadFinished");
             showInMobiAdd();
         }
 
         @Override
         public void onAdReceived(InMobiInterstitial inMobiInterstitial) {
-            Log.d(TAG,"onAdReceived");
+            Log.d(TAG, "onAdReceived");
         }
 
         @Override
@@ -166,17 +174,17 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public void onAdDisplayFailed(InMobiInterstitial inMobiInterstitial) {
-            Log.d(TAG,"onAdDisplayFailed");
+            Log.d(TAG, "onAdDisplayFailed");
         }
 
         @Override
         public void onAdWillDisplay(InMobiInterstitial inMobiInterstitial) {
-            Log.d(TAG,"onAdWillDisplay");
+            Log.d(TAG, "onAdWillDisplay");
         }
 
         @Override
         public void onAdDisplayed(InMobiInterstitial inMobiInterstitial) {
-            Log.d(TAG,"onAdDisplayed");
+            Log.d(TAG, "onAdDisplayed");
         }
 
         @Override
@@ -194,7 +202,6 @@ public class MainActivity extends BaseActivity {
 
         }
     };
-
 
 
     @Override

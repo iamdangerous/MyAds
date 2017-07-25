@@ -23,6 +23,7 @@ public class LockScreenReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+
         String action = intent.getAction();
 
         switch (action) {
