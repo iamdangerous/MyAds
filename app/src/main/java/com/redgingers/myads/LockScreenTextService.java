@@ -10,6 +10,9 @@ import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -75,22 +78,23 @@ public class LockScreenTextService extends Service {
     public class LockScreenStateReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)||(intent.getAction().equals(Intent.ACTION_SCREEN_ON))) {
                 //if screen is turn off show the textview
 //                if (!isShowing) {
 //                Log.d()
-                windowManager.removeViewImmediate(textview);
-                    windowManager.addView(textview, params);
+//                windowManager.removeViewImmediate(textview);
+//                    windowManager.addView(textview, params);
+                setView();
 //                    isShowing = true;
 //                }
             }
 
             else if(intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
                 //Handle resuming events if user is present/screen is unlocked remove the textview immediately
-                if (isShowing) {
-                    windowManager.removeViewImmediate(textview);
-                    isShowing = false;
-                }
+//                if (isShowing) {
+//                    windowManager.removeViewImmediate(textview);
+//                    isShowing = false;
+//                }
             }
         }
     }
@@ -108,5 +112,30 @@ public class LockScreenTextService extends Service {
             isShowing = false;
         }
         super.onDestroy();
+    }
+
+    private void setView(){
+        LayoutInflater mInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        WindowManager mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        View mView = mInflater.inflate(R.layout.activity_main, null);
+
+        WindowManager.LayoutParams mLayoutParams =
+        new WindowManager.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, 0, 0,
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+/* | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON */,
+                PixelFormat.RGBA_8888);
+
+        mLayoutParams  = new WindowManager.LayoutParams(
+                //WindowManager.LayoutParams.TYPE_INPUT_METHOD |
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,// | WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                PixelFormat.TRANSLUCENT);
+
+        mWindowManager.addView(mView, mLayoutParams);
     }
 }

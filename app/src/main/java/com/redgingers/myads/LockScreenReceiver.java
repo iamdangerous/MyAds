@@ -29,11 +29,12 @@ public class LockScreenReceiver extends BroadcastReceiver {
             case ACTION_SCREEN_ON: {
                 Log.d(TAG, "ACTION_SCREEN_ON");
                 sampleView(context);
-                showMainActivity(context);
+//                showMainActivity(context);
             }
             break;
             case ACTION_SCREEN_OFF: {
                 Log.d(TAG, "ACTION_SCREEN_OFF");
+                sampleView(context);
             }
             break;
             case ACTION_BOOT_COMPLETED: {
@@ -50,15 +51,27 @@ public class LockScreenReceiver extends BroadcastReceiver {
         context.startActivity(i);
     }
 
+
+
     private void sampleView(Context context){
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         WindowManager mWindowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         View mView = mInflater.inflate(R.layout.activity_main, null);
 
+//        WindowManager.LayoutParams mLayoutParams = new WindowManager.LayoutParams(
+//                ViewGroup.LayoutParams.WRAP_CONTENT,
+//                ViewGroup.LayoutParams.WRAP_CONTENT, 0, 0,
+//                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+//                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+//                        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+//                        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+///* | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON */,
+//                PixelFormat.RGBA_8888);
+
         WindowManager.LayoutParams mLayoutParams = new WindowManager.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, 0, 0,
-                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                ViewGroup.LayoutParams.WRAP_CONTENT, 100, 100,
+                WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                         | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON

@@ -51,21 +51,7 @@ public class LockScreenService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        LayoutInflater mInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        WindowManager mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        View mView = mInflater.inflate(R.layout.activity_main, null);
 
-        WindowManager.LayoutParams mLayoutParams = new WindowManager.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, 0, 0,
-                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-/* | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON */,
-                PixelFormat.RGBA_8888);
-
-        mWindowManager.addView(mView, mLayoutParams);
         return START_STICKY;
     }
 
